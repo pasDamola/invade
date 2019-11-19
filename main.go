@@ -60,8 +60,7 @@ func commands() {
 					return
 				}
 			   
-				
-				invade.StartGame(alienNum)
+				 invade.StartGame(int(alienNum))
 
 		
 			},

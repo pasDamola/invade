@@ -1,4 +1,4 @@
-module invade
+module github.com/pasDamola/invade
 
 go 1.13
 
