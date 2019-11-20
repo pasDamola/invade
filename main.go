@@ -31,6 +31,7 @@ func commands() {
 			Name:  "map",
 			Usage: "Create your map file",
 			Action: func(c *cli.Context) {
+				//Create a map file with the map command, passing the name of file as an argument
 				mapFile := fmt.Sprintf("%s.map", c.Args().Get(0))
 				if _, err := os.Stat(mapFile); err == nil {
 					fmt.Printf("This map file %s already exists, try another file name...\n", mapFile)
@@ -52,10 +53,21 @@ func commands() {
 			Name:  "start",
 			Usage: "Start the  Invasion!!",
 			Action: func(c *cli.Context) {
+				//Create a map file on the start command
+				mapFile := fmt.Sprintf("%s.map", c.Args().Get(0))
+				if _, err := os.Stat(mapFile); err == nil {
+					fmt.Printf("This map file %s already exists, try another file name...\n", mapFile+".map")
+					return
+				}
+
+				f, _ := os.OpenFile(mapFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+				defer f.Close()
+
+
 				// Input the amount of aliens you want to use
-				alienNum, err := strconv.ParseInt(c.Args().Get(0), 10, 16)
+				alienNum, err := strconv.ParseInt(c.Args().Get(1), 10, 16)
 				if err != nil {
-					fmt.Printf("'%v' is not a valid integer", c.Args().Get(0))
+					fmt.Printf("'%v' is not a valid integer", c.Args().Get(1))
 					fmt.Println(alienNum)
 					return
 				}
