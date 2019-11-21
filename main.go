@@ -12,8 +12,6 @@ import (
 	"strconv"
 
 	"github.com/pasDamola/invade/invade"
-
-	
 )
 
 var app = cli.NewApp()
@@ -34,7 +32,7 @@ func commands() {
 				//Create a map file with the map command, passing the name of file as an argument
 				mapFile := fmt.Sprintf("%s.map", c.Args().Get(0))
 				if _, err := os.Stat(mapFile); err == nil {
-					fmt.Printf("This map file %s already exists, try another file name...\n", mapFile)
+					fmt.Printf("This map file %s already exists, try using another file name...\n", mapFile)
 					return
 				}
 
@@ -55,15 +53,6 @@ func commands() {
 			Action: func(c *cli.Context) {
 				//Create a map file on the start command
 				mapFile := fmt.Sprintf("%s.map", c.Args().Get(0))
-				if _, err := os.Stat(mapFile); err == nil {
-					fmt.Printf("This map file %s already exists, try another file name...\n", mapFile+".map")
-					return
-				}
-
-				f, _ := os.OpenFile(mapFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-				defer f.Close()
-
-
 				// Input the amount of aliens you want to use
 				alienNum, err := strconv.ParseInt(c.Args().Get(1), 10, 16)
 				if err != nil {
@@ -71,10 +60,9 @@ func commands() {
 					fmt.Println(alienNum)
 					return
 				}
-			   
-				 invade.StartGame(int(alienNum))
 
-		
+				invade.StartGame(int(alienNum), mapFile)
+
 			},
 		},
 	}
