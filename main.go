@@ -52,8 +52,13 @@ func commands() {
 			Usage: "Start the  Invasion!!",
 			Action: func(c *cli.Context) {
 				//Create a map file on the start command
-				mapFile := fmt.Sprintf("%s.map", c.Args().Get(0))
-				// Input the amount of aliens you want to use
+				f, err := os.Open(c.Args().Get(0))
+				if err != nil {
+					fmt.Printf("This file probably doesnt exist, Try creating a new map file with the 'map' command...\n")
+			
+				}
+				defer f.Close()
+
 				alienNum, err := strconv.ParseInt(c.Args().Get(1), 10, 16)
 				if err != nil {
 					fmt.Printf("'%v' is not a valid integer", c.Args().Get(1))
@@ -61,7 +66,9 @@ func commands() {
 					return
 				}
 
-				invade.StartGame(int(alienNum), mapFile)
+				
+                fmt.Println(f.Name())
+				invade.StartGame(int(alienNum), f.Name())
 
 			},
 		},
