@@ -38,6 +38,7 @@ func commands() {
 
 				f, _ := os.OpenFile(mapFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 				defer f.Close()
+
 			},
 		},
 		{
@@ -55,10 +56,11 @@ func commands() {
 				f, err := os.Open(c.Args().Get(0))
 				if err != nil {
 					fmt.Printf("This file probably doesnt exist, Try creating a new map file with the 'map' command...\n")
-			
+
 				}
 				defer f.Close()
 
+				//parse the number of aliens for this invasion
 				alienNum, err := strconv.ParseInt(c.Args().Get(1), 10, 16)
 				if err != nil {
 					fmt.Printf("'%v' is not a valid integer", c.Args().Get(1))
@@ -66,9 +68,10 @@ func commands() {
 					return
 				}
 
-				
-                fmt.Println(f.Name())
-				invade.StartGame(int(alienNum), f.Name())
+				fmt.Println(f.Name())
+				m, err := invade.NewMapFromFile(c.Args().Get(0))
+
+				m.Play()
 
 			},
 		},

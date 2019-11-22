@@ -1,0 +1,12 @@
+Lagos south=AkwaIbom
+AkwaIbom north=Lagos 
+Enugu west=Osun south=PH
+Osun south=Jigawa west=Oyo east=Enugu
+Oyo east=Osun south=Niger
+Abuja east=Niger
+Niger north=Oyo west=Abuja
+Jigawa north=Osun east=PH
+Ogun east=Taraba
+Taraba west=Ogun
+Kano north=Taraba
+PH north=Enugu west=Jigawa
