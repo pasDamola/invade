@@ -1,12 +1,9 @@
-Lagos south=AkwaIbom
-AkwaIbom north=Lagos 
-Enugu west=Osun south=PH
-Osun south=Jigawa west=Oyo east=Enugu
-Oyo east=Osun south=Niger
-Abuja east=Niger
-Niger north=Oyo west=Abuja
-Jigawa north=Osun east=PH
-Ogun east=Taraba
-Taraba west=Ogun
-Kano north=Taraba
-PH north=Enugu west=Jigawa
+Lagos east=Enugu south=PH
+Enugu west=Lagos east=Onitsha south=Akwa
+Onitsha west=Enugu south=Benin
+PH north=Lagos east=Akwa south=CrossRiver
+Akwa west=PH north=Enugu east=Benin south=Ebonyi
+Benin west=Akwa north=Onitsha south=Edo
+CrossRiver north=PH east=Ebonyi
+Ebonyi west=CrossRiver north=Akwa east=Edo
+Edo west=Ebonyi north=Benin

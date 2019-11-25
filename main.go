@@ -36,9 +36,6 @@ func commands() {
 					return
 				}
 
-				f, _ := os.OpenFile(mapFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-				defer f.Close()
-
 			},
 		},
 		{
@@ -67,11 +64,16 @@ func commands() {
 					fmt.Println(alienNum)
 					return
 				}
+				//continuePlay := true;
 
-				fmt.Println(f.Name())
-				m, err := invade.NewMapFromFile(c.Args().Get(0))
+				invade.BuildWorld(c.Args().Get(0));
+				// for continuePlay {
+				// 	continuePlay = invade.playRound();
+				// }
+				// invade.Cities();
+				// invade.Aliens();
 
-				m.Play()
+
 
 			},
 		},
