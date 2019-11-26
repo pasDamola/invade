@@ -19,62 +19,53 @@ import (
 
 )
 
-//each city is numbered from 1 to M cites
+
 type city struct {
 	id        int
 	name      string
-	neighbors map[int]*city //north = 1 south =2 East = 3 West = 4
+	directions map[int]*city //north = 1 south =2 East = 3 West = 4
 	destroyed bool
 }
-type alien struct { //Each Alien has two states active and inactive.
-	active     bool //Alien state becomes inactive when it is achives total moves or destroyed
+type alien struct { 
+	active     bool 
 	location   int
-	totalmoves int
+	turns int
 }
 
-var cities map[int]*city            //map of cities
-var aliens []alien                  //alien array
-var iterator int                    //track of the number of cities
+var cities map[int]*city            
+var aliens []alien                  
+var iterator int      // the alien counter              
 var citytoalien = make(map[int]int) //maps alien to a city
 
-func Move() int {
 
-	mv := rand.Intn(4) //detemining the direction of the next move
-	if mv == 0 {
-		mv++
-	}
-	return mv
-}
+func MoveDirections(direction string) int { //transalator for city building
 
-func TranslateDirection(direc string) int { //transalator for city building
-	if direc == "north" {
+	switch direction {
+	case "north":
 		return 1
-	}
-	if direc == "south" {
+	case "south":
 		return 2
-	}
-	if direc == "east" {
+	case "east":
 		return 3
-	}
-	if direc == "west" {
+	case "west": 
 		return 4
+	default:
+		return 0
 	}
-	return 0
 }
-func Translateback(direc int) string { //transalator for city building
-	if direc == 1 {
+func MoveDirectionsBack(direction int) string { //transalator for city building
+	switch direction {
+	case 1:
 		return "north"
-	}
-	if direc == 2 {
+	case 2:
 		return "south"
-	}
-	if direc == 3 {
+	case 3:
 		return "east"
-	}
-	if direc == 4 {
+	case 4: 
 		return "west"
+	default:
+		return "No opposite directions"
 	}
-	return "nope"
 }
 
 func GenerateAlienOnMap(count int) { //generating aliens and assigning to random city
@@ -98,7 +89,7 @@ func GenerateOrGetCity(cityname string) *city { //generates new city object
 	var gtcity city
 	iterator++
 	gtcity = city{iterator, cityname, nil, false}
-	gtcity.neighbors = make(map[int]*city)
+	gtcity.directions = make(map[int]*city)
 	cities[iterator] = &gtcity
 	return (&gtcity)
 }
@@ -124,7 +115,7 @@ func GenerateCityMap(fileName string) { //generates the city map based on the in
 			GenerateOrGetCity(str[0]) //generate if not
 			citiesread[str[0]] = iterator
 		}
-		//handling neighbors
+		//handling directions
 
 		for i := 1; i < len(str); i++ {
 			st := strings.Split(str[i], "=")
@@ -136,7 +127,7 @@ func GenerateCityMap(fileName string) { //generates the city map based on the in
 			} else {
 				neig = cities[citiesread[st[1]]]
 			}
-			cities[citiesread[str[0]]].neighbors[TranslateDirection(st[0])] = neig //assigning the neighbor city
+			cities[citiesread[str[0]]].directions[MoveDirections(st[0])] = neig //assigning the neighbor city
 		}
 		if err != nil {
 			break
@@ -145,7 +136,7 @@ func GenerateCityMap(fileName string) { //generates the city map based on the in
 	fmt.Println("Generated Map!!") //print the generated city map
 	for k, v := range cities {
 		fmt.Print("key: ", k, " value: ( ", v.name)
-		for s, t := range v.neighbors {
+		for s, t := range v.directions {
 			fmt.Print(" ", s, " : ", t.name)
 		}
 		fmt.Println(")")
@@ -167,16 +158,19 @@ func MoveAliens() {
 	//var ctemp city
 	for i := 0; i < len(aliens); i++ {
 		if aliens[i].active {
-			aliens[i].totalmoves++
-			mvdir := Move()
-			//randomly selects drections to move
+			aliens[i].turns++
+			mvdir := rand.Intn(4)
+			if(mvdir == 0){
+				mvdir++
+			}
+			
+            
 
-			if cities[aliens[i].location].neighbors[mvdir] != nil && !cities[aliens[i].location].neighbors[mvdir].destroyed { //check if the city neighbor exist and that it is not destroyed
-				cid := cities[aliens[i].location].neighbors[mvdir].id //name of the neigbouring city
+			if cities[aliens[i].location].directions[mvdir] != nil && !cities[aliens[i].location].directions[mvdir].destroyed { //check if the city neighbor exist and that it is not destroyed
+				cid := cities[aliens[i].location].directions[mvdir].id //name of the neigbouring city
 				if citytoalien[cid] != 0 {                            //two aliens in the same
-					cities[aliens[i].location].neighbors[mvdir].destroyed = true
-
-					fmt.Println("Citi ", cities[aliens[i].location].neighbors[mvdir].name, " Destroyed by alien", citytoalien[cid], " and alien", i)
+					cities[aliens[i].location].directions[mvdir].destroyed = true
+					fmt.Println("City ", cities[aliens[i].location].directions[mvdir].name, " Destroyed by alien", citytoalien[cid], " and alien", i)
 					aliens[i].active = false                //destroy the alien
 					aliens[citytoalien[cid]].active = false //destroy the alien already present in the city
 					citytoalien[aliens[i].location] = 0     //reset the number of aliens in the current city
@@ -188,7 +182,7 @@ func MoveAliens() {
 
 			}
 
-			if aliens[i].totalmoves == 10000 { //checking and deactivating alien when they reach 10000 moves
+			if aliens[i].turns == 10000 { //checking and deactivating alien when they reach 10000 moves
 				aliens[i].active = false
 			}
 
@@ -203,9 +197,7 @@ func MoveTillEnd() {
 	}
 }
 func Run(alienNum string) {
-
 	rand.Seed(time.Now().UTC().UnixNano()) //seeding the random number
-	           //calling to generate the city map
 	noaliens, _ := strconv.Atoi(alienNum)
 	fmt.Println("city count:", iterator)
 	if noaliens < iterator {
@@ -216,8 +208,8 @@ func Run(alienNum string) {
 			if !v.destroyed {
 				k = k + 1
 				fmt.Print(v.name)
-				for s, t := range v.neighbors {
-					fmt.Print(" ", Translateback(s), "=", t.name)
+				for s, t := range v.directions {
+					fmt.Print(" ", MoveDirectionsBack(s), "=", t.name)
 				}
 				fmt.Println()
 			}
