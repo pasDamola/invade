@@ -79,7 +79,6 @@ func GenerateAlienOnMap(count int) {
 			x++
 		}
 		aliens[i] = alien{true, x, 0}
-		fmt.Println("aliens:", aliens[i])
 		//attach alien to city
 		citytoalien[x] = i
 		fmt.Println("Alien ", i, " at ", cities[x].name)
