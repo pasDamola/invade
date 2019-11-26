@@ -21,3 +21,12 @@ func TestMoveDirectionsBack(t *testing.T) {
 		t.Errorf("This function must return an string type i.e. 1 would return 'north', 2 would return 'south'")
 	}
 }
+
+
+func TestRun(t *testing.T){
+	value := CheckEnd()
+	valueType := reflect.TypeOf(value)
+	if k := valueType.Kind(); k != reflect.Bool {
+		t.Fail()
+	}
+}
