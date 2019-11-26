@@ -12,6 +12,8 @@ import (
 	"strconv"
 
 	"github.com/pasDamola/invade/invade"
+
+	
 )
 
 var app = cli.NewApp()
@@ -66,14 +68,10 @@ func commands() {
 				}
 				//continuePlay := true;
 
-				invade.BuildWorld(c.Args().Get(0));
-				// for continuePlay {
-				// 	continuePlay = invade.playRound();
-				// }
-				// invade.Cities();
-				// invade.Aliens();
+				invade.GenerateCityMap(c.Args().Get(0)) 
 
 
+				invade.Run(c.Args().Get(1))
 
 			},
 		},
