@@ -67,18 +67,19 @@ func MoveDirectionsBack(direction int) string { //transalator for city building
 
 //This function generates aliens and randomly assings them to citites
 func GenerateAlienOnMap(count int) {
-	aliens = make([]alien, count+1) 
+	aliens = make([]alien, count+1)
 	x := 0
 	for i := 1; i <= count; i++ {
-		 
+
 		//ensuring that two aliens are not assigned to the same city intially
-		for citytoalien[x] != 0 || x == 0 { 
-			x = rand.Intn(iterator) 
+		for citytoalien[x] != 0 || x == 0 {
+			x = rand.Intn(iterator)
 		}
 		if x == 0 {
 			x++
 		}
 		aliens[i] = alien{true, x, 0}
+		fmt.Println("aliens:", aliens[i])
 		//attach alien to city
 		citytoalien[x] = i
 		fmt.Println("Alien ", i, " at ", cities[x].name)
@@ -204,13 +205,14 @@ func MoveTillEnd() {
 }
 func Run(alienNum string) {
 	//seeding the random number
-	rand.Seed(time.Now().UTC().UnixNano()) 
+	rand.Seed(time.Now().UTC().UnixNano())
 	noaliens, _ := strconv.Atoi(alienNum)
+	fmt.Println("alien Number:", noaliens)
 	fmt.Println("city count:", iterator)
 	if noaliens < iterator {
-		GenerateAlienOnMap(noaliens)       
-		MoveTillEnd()                      
-		fmt.Println("Remaining cities !!") 
+		GenerateAlienOnMap(noaliens)
+		MoveTillEnd()
+		fmt.Println("Remaining cities !!")
 		for k, v := range cities {
 			if !v.isDestroyed {
 				k = k + 1
